@@ -30,13 +30,7 @@ const LandMarketplace = () => {
               <a href="#" className="text-white/80 hover:text-[#B2C2B1] transition">Legal</a>
             </nav>
 
-            {/* CTAs */}
-            <div className="hidden md:flex items-center space-x-6">
-              <button className="text-xs font-bold uppercase tracking-widest text-[#B2C2B1] hover:text-white transition">Sign In</button>
-              <button className="bg-[#B2C2B1] text-[#1C261F] px-5 py-2 rounded-sm text-xs font-black uppercase tracking-widest hover:bg-white transition">
-                List Property
-              </button>
-            </div>
+
 
             {/* Mobile Menu */}
             <div className="md:hidden">
