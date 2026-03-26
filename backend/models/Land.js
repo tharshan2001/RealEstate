@@ -3,30 +3,22 @@ import mongoose from "mongoose";
 const landSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    location: { type: String, required: true },
+    region: { type: String, required: true },
+    size: { type: String, required: true },
+    type: { type: String, required: true },
+    price: { type: String, required: true },
     description: { type: String },
-    price: { type: Number, required: true },
-    area: { type: Number, required: true }, // sq meters or acres
-    landType: {
-      type: String,
-      enum: ["residential", "agricultural", "commercial", "industrial"],
-      required: true,
+    features: [{ type: String }],
+    heroImg: { type: String },
+    gallery: [{ type: String }],
+    coordinates: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
     },
-    utilities: [{ type: String }], // water, electricity, road access, etc.
-    location: {
-      address: { type: String },
-      city: { type: String },
-      state: { type: String },
-      zipcode: { type: String },
-      coordinates: {
-        lat: { type: Number },
-        lng: { type: Number },
-      },
-    },
-    images: [{ type: String }], // URLs
-    ownerName: { type: String },
-    ownerContact: { type: String },
-    assignedAgent: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     status: { type: String, enum: ["available", "sold"], default: "available" },
+    isPublished: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

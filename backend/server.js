@@ -2,7 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
-import userRoutes from "./routes/userRoutes.js";
+import landRoutes from "./routes/landRoutes.js";
+import blogRoutes from "./routes/blogRoutes.js";
+import customerRoutes from "./routes/customerRoutes.js";
+import { login, logout, getMe } from "./controllers/authController.js";
+import { protect } from "./middleware/authMiddleware.js";
 
 dotenv.config();
 connectDB();
@@ -14,7 +18,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use("/api/users", userRoutes);
+app.use("/api/lands", landRoutes);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/customers", customerRoutes);
+
+// Auth routes
+app.post("/api/auth/login", login);
+app.post("/api/auth/logout", logout);
+app.get("/api/auth/me", protect, getMe);
 
 // Default route
 app.get("/", (req, res) => {
