@@ -141,33 +141,24 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-10 md:py-14 px-4 md:px-8 bg-surface-container-highest">
+        {/* Testimonials (5 testimonials, no photos) */}
+        <section className="py-12 md:py-16 lg:py-24 px-4 md:px-8 bg-surface-container-highest">
           <div className="max-w-7xl mx-auto text-center">
             <h2 className="font-headline text-2xl md:text-3xl text-primary mb-8 md:mb-12">What Our Clients Say</h2>
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-              <div className="group max-w-xs">
-                <div className="w-32 h-32 rounded-full overflow-hidden mb-4 mx-auto ring-4 ring-outline-variant/20 transition-all group-hover:ring-primary/40">
-                  <img 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnNoM97fAMvtFw2MVSucY9LgYJE9ULU8SGgqMepA1vglTgJyXQzMcgLc0wDcMZ77VHhBg378xVaWAKg5HEiaHGatLx1caLjD-WARrUitmI1kD-24sgXPsRC72__Tp3kjosXfwIcK33_1O99Msn62V4_JnYxMJi_liOZU9Az6baVgkHoZ6S-CGs3bZy7jet3PSF9MbMz4dIgLZ0RpvPYCNnni7-BRfdRKMdB4VUTtwRaCOC_IVd0hLxMrJx2m312UlYL1d4GJaNAVG1" 
-                    alt="Ar. Karthik S."
-                  />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-items-center">
+              {[
+                { quote: "Estate Curator transformed our living spaces into timeless blends of heritage and luxury.", name: "Alex M.", title: "Property Investor" },
+                { quote: "The Northern designs feel premium yet welcoming — a rare balance.", name: "Priya K.", title: "Architect" },
+                { quote: "Quality, integrity, and thoughtful detail from start to finish.", name: "Jon D.", title: "Home Owner" },
+                { quote: "Sustainability with style; the spaces breathe with the climate.", name: "Nila P.", title: "Developer" },
+                { quote: "The team understands place and culture; the spaces breathe.", name: "Sanjay R.", title: "Gallerist" },
+              ].map((t, idx) => (
+                <div key={idx} className="bg-surface-container-low rounded-xl p-4 md:p-6 max-w-xs w-full text-left">
+                  <p className="text-sm md:text-base text-on-surface-variant italic">“{t.quote}”</p>
+                  <p className="mt-3 font-semibold text-primary">{t.name}</p>
+                  <p className="text-xs text-on-surface-variant">{t.title}</p>
                 </div>
-                <h4 className="text-lg font-headline text-primary">Ar. Karthik S.</h4>
-                <p className="text-on-surface-variant text-xs font-label uppercase tracking-widest mt-1">Lead Architect</p>
-              </div>
-              <div className="group max-w-xs">
-                <div className="w-32 h-32 rounded-full overflow-hidden mb-4 mx-auto ring-4 ring-outline-variant/20 transition-all group-hover:ring-primary/40">
-                  <img 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzoR2Yt4aWpSjTIZbLZAZDyoHtWwWvxeHqPTyx9Cr0FtoK8FpMeE5txnniN0-e3bDIdH9hrrn3SwAtUUu191ug0GuaTZ7VQzSgjQ3rlmQyaUSs8BeE1EOuKMYGYW95G7mygIXBQcrYyy_cD7U2IlJc3JIsaJsejD2pQjXhfvPxqXTh6Vx4sVUCXRif76Y58NU0kPYKZy2H-wlDFFIcriTyG5PQBHr_QUPl_PWaskF3HW14TfCdbxOvpAFwmrPqiAiGdI2xxWy0JEv7" 
-                    alt="Meera Rajan"
-                  />
-                </div>
-                <h4 className="text-lg font-headline text-primary">Meera Rajan</h4>
-                <p className="text-on-surface-variant text-xs font-label uppercase tracking-widest mt-1">Heritage Consultant</p>
-              </div>
+              ))}
             </div>
           </div>
         </section>

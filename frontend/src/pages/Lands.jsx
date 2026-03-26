@@ -30,7 +30,7 @@ const Lands = () => {
 
   return (
     <Layout>
-      <main className="pt-16 md:pt-20 pb-16 md:pb-20 px-4 md:px-6 lg:px-8">
+      <main className="pt-0 pb-16 md:pb-20 px-4 md:px-6 lg:px-8">
         <header className="mb-10 md:mb-14 fade-in-up">
           <span className="font-label text-secondary uppercase tracking-[0.3em] text-xs font-semibold">Northern Province</span>
           <h1 className="font-headline text-3xl md:text-5xl lg:text-6xl text-primary mt-2">Our Lands</h1>

@@ -13,6 +13,7 @@ import AdminBlogs from './pages/admin/AdminBlogs';
 import BlogForm from './pages/admin/BlogForm';
 import AdminCustomers from './pages/admin/AdminCustomers';
 import PageTransition from './components/PageTransition';
+import WhatsAppButton from './components/WhatsAppButton';
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
           <Route path="customers" element={<AdminCustomers />} />
         </Route>
       </Routes>
+      {/* Floating WhatsApp button appears on all pages; configure number via VITE_WHATSAPP_NUMBER */}
+      <WhatsAppButton />
     </Router>
   );
 }
