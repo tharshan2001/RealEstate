@@ -15,14 +15,14 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md border-b border-outline-variant/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 md:h-20">
+          <div className="flex justify-between items-center h-14 md:h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 md:gap-3">
             <span className="material-symbols-outlined text-primary text-xl md:text-2xl">home</span>
             <span className="text-lg md:text-2xl font-headline italic font-light tracking-wide text-primary">
-              Estate Curator
+              7hilax RealAgro
             </span>
           </Link>
 
@@ -34,8 +34,8 @@ const Navbar = () => {
                 to={link.to}
                 className={`font-label text-sm uppercase tracking-widest pb-1 transition-colors duration-300 ${
                   isActive(link.to)
-                    ? 'text-primary border-b-2 border-tertiary'
-                    : 'text-primary/70 hover:text-secondary'
+                    ? 'text-primary border-b-2 border-primary'
+                    : 'text-on-surface-variant hover:text-primary'
                 }`}
               >
                 {link.label}
@@ -47,7 +47,7 @@ const Navbar = () => {
           <div className="flex items-center gap-3 md:gap-4">
             <Link
               to="/"
-              className="hidden sm:block bg-primary text-on-primary px-4 md:px-6 py-2 md:py-2.5 rounded-full font-label text-xs uppercase tracking-widest hover:shadow-lg transition-all"
+              className="hidden sm:block bg-primary text-on-primary px-4 md:px-6 py-2 md:py-2.5 rounded-full font-label text-xs uppercase tracking-widest hover:opacity-90 transition-opacity"
             >
               Enquire
             </Link>
@@ -67,7 +67,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-surface border-t border-outline-variant/10">
+        <div className="md:hidden bg-surface border-t border-outline-variant/20">
           <div className="px-4 py-4 space-y-3">
             {navLinks.map((link) => (
               <Link
@@ -75,7 +75,7 @@ const Navbar = () => {
                 to={link.to}
                 onClick={() => setIsMenuOpen(false)}
                 className={`block font-label text-sm uppercase tracking-widest py-2 ${
-                  isActive(link.to) ? 'text-primary font-semibold' : 'text-primary/70'
+                  isActive(link.to) ? 'text-primary font-semibold' : 'text-on-surface-variant'
                 }`}
               >
                 {link.label}

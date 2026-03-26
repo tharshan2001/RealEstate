@@ -21,20 +21,20 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-2 md:gap-3 mb-4">
               <span className="material-symbols-outlined text-primary text-xl md:text-2xl">home</span>
               <span className="text-xl md:text-2xl font-headline italic font-light tracking-wide text-primary">
-                Estate Curator
+                7hilax RealAgro
               </span>
             </Link>
             <p className="text-tertiary text-sm md:text-base leading-relaxed max-w-md mb-6">
-              Trusted real estate in Sri Lanka's Northern Province. Quality properties in selected areas.
+              Premium agricultural and real estate solutions in Sri Lanka's Northern Province. Quality lands in selected areas.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="tel:+94112548900" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm">
+              <a href="tel:+94771234567" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm">
                 <span className="material-symbols-outlined text-secondary text-lg">phone</span>
-                <span>+94 11 254 8900</span>
+                <span>+94 77 123 4567</span>
               </a>
-              <a href="mailto:curator@estatecurator.lk" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm">
+              <a href="mailto:info@7hilax.com" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm">
                 <span className="material-symbols-outlined text-secondary text-lg">mail</span>
-                <span>curator@estatecurator.lk</span>
+                <span>info@7hilax.com</span>
               </a>
             </div>
           </div>
@@ -78,7 +78,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="pt-6 md:pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="font-body text-xs md:text-sm text-on-surface-variant">
-            © {currentYear} Estate Curator. All rights reserved.
+            © {currentYear} 7hilax RealAgro. All rights reserved.
           </p>
         </div>
       </div>

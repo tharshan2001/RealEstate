@@ -22,7 +22,7 @@ export const createCustomer = async (req, res) => {
   }
 };
 
-// Update customer status (admin)
+// Update customer (admin)
 export const updateCustomer = async (req, res) => {
   try {
     const customer = await Customer.findByIdAndUpdate(req.params.id, req.body, { new: true });

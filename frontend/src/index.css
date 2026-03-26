@@ -1,60 +1,60 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #002f35;
+  --color-primary: #2d4a3e;
   --color-on-primary: #ffffff;
-  --color-primary-container: #00474f;
-  --color-on-primary-container: #7db4be;
-  --color-primary-fixed: #b4ecf6;
-  --color-on-primary-fixed: #001f24;
-  --color-primary-fixed-dim: #98d0d9;
-  --color-on-primary-fixed-variant: #0e4e56;
+  --color-primary-container: #d4e4db;
+  --color-on-primary-container: #0a2919;
+  --color-primary-fixed: #d4e4db;
+  --color-on-primary-fixed: #0a2919;
+  --color-primary-fixed-dim: #b0ccbf;
+  --color-on-primary-fixed-variant: #1a3d2a;
 
-  --color-secondary: #3b6934;
+  --color-secondary: #5c7a5f;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #b9eeab;
-  --color-on-secondary-container: #3f6d38;
-  --color-secondary-fixed: #bcf0ae;
-  --color-on-secondary-fixed: #002201;
-  --color-secondary-fixed-dim: #a1d494;
-  --color-on-secondary-fixed-variant: #23501e;
+  --color-secondary-container: #e3ede2;
+  --color-on-secondary-container: #3a4f3d;
+  --color-secondary-fixed: #c8dbc8;
+  --color-on-secondary-fixed: #1a2918;
+  --color-secondary-fixed-dim: #a8c2a9;
+  --color-on-secondary-fixed-variant: #2a3d2c;
 
-  --color-tertiary: #432100;
+  --color-tertiary: #8b7355;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #633400;
-  --color-on-tertiary-container: #e79b57;
-  --color-tertiary-fixed: #ffdcc2;
-  --color-on-tertiary-fixed: #2e1500;
-  --color-tertiary-fixed-dim: #ffb77b;
-  --color-on-tertiary-fixed-variant: #6d3a00;
+  --color-tertiary-container: #f5ebe0;
+  --color-on-tertiary-container: #5c4328;
+  --color-tertiary-fixed: #f5ebe0;
+  --color-on-tertiary-fixed: #3d2a1a;
+  --color-tertiary-fixed-dim: #d9cbb8;
+  --color-on-tertiary-fixed-variant: #6d5035;
 
-  --color-surface: #f8faf6;
-  --color-surface-dim: #d8dbd7;
-  --color-surface-bright: #f8faf6;
-  --color-surface-container: #eceeeb;
-  --color-surface-container-low: #f2f4f0;
-  --color-surface-container-high: #e7e9e5;
-  --color-surface-container-highest: #e1e3df;
+  --color-surface: #faf8f5;
+  --color-surface-dim: #e5e0db;
+  --color-surface-bright: #ffffff;
+  --color-surface-container: #f0ebe5;
+  --color-surface-container-low: #f5f2ed;
+  --color-surface-container-high: #e8e3dc;
+  --color-surface-container-highest: #ded8cf;
   --color-surface-container-lowest: #ffffff;
 
-  --color-background: #f8faf6;
-  --color-on-background: #191c1a;
-  --color-on-surface: #191c1a;
-  --color-on-surface-variant: #40484a;
+  --color-background: #faf8f5;
+  --color-on-background: #1a1a18;
+  --color-on-surface: #1a1a18;
+  --color-on-surface-variant: #4a4a48;
 
-  --color-outline: #70797a;
-  --color-outline-variant: #bfc8ca;
+  --color-outline: #7a7a78;
+  --color-outline-variant: #cac5c0;
 
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
 
-  --color-inverse-surface: #2e312f;
-  --color-inverse-on-surface: #eff1ed;
-  --color-inverse-primary: #98d0d9;
+  --color-inverse-surface: #e5e0db;
+  --color-inverse-on-surface: #2e2e2b;
+  --color-inverse-primary: #a8c2a9;
 
-  --color-surface-tint: #2d666f;
+  --color-surface-tint: #2d4a3e;
 
   --font-family-headline: "Noto Serif", serif;
   --font-family-body: "Manrope", sans-serif;
@@ -110,7 +110,7 @@
   }
 
   .monsoon-glass {
-    background: rgba(248, 250, 246, 0.7);
+    background: rgba(250, 248, 245, 0.7);
     backdrop-filter: blur(12px);
   }
 
@@ -121,5 +121,74 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .page-enter {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms ease-out, transform 400ms ease-out;
+  }
+
+  .page-exit {
+    opacity: 1;
+  }
+
+  .page-exit-active {
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .slide-in-left {
+    animation: slideInLeft 0.4s ease-out forwards;
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }

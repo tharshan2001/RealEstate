@@ -1,5 +1,6 @@
 // Blog Controller
 import Blog from "../models/Blog.js";
+import { uploadToS3 } from "../middleware/uploadMiddleware.js";
 
 // Get all blogs
 export const getBlogs = async (req, res) => {
@@ -25,7 +26,24 @@ export const getBlog = async (req, res) => {
 // Create blog (admin)
 export const createBlog = async (req, res) => {
   try {
-    const blog = new Blog(req.body);
+    const { title, slug, excerpt, content, category, author, isPublished } = req.body;
+
+    let imageUrl = "";
+    if (req.file) {
+      imageUrl = await uploadToS3(req.file, "blogs/");
+    }
+
+    const blog = new Blog({
+      title,
+      slug,
+      excerpt,
+      content,
+      image: imageUrl,
+      category,
+      author: author || "Estate Curator",
+      isPublished: isPublished !== undefined ? isPublished : true,
+    });
+
     const savedBlog = await blog.save();
     res.status(201).json(savedBlog);
   } catch (error) {
@@ -36,7 +54,13 @@ export const createBlog = async (req, res) => {
 // Update blog (admin)
 export const updateBlog = async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      updateData.image = await uploadToS3(req.file, "blogs/");
+    }
+
+    const blog = await Blog.findByIdAndUpdate(req.params.id, updateData, { new: true });
     if (!blog) return res.status(404).json({ message: "Blog not found" });
     res.json(blog);
   } catch (error) {

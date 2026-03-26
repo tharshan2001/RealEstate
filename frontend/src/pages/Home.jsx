@@ -80,6 +80,25 @@ const Home = () => {
           </div>
         </section>
 
+        {/* Stats */}
+        <section className="py-10 md:py-14 px-4 md:px-8 bg-secondary-container fade-in-up">
+          <div className="container mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center">
+              {[
+                { num: '6', label: 'Curated Sites' },
+                { num: '6', label: 'Locations' },
+                { num: '30+', label: 'Years Heritage' },
+                { num: '100%', label: 'Verified Titles' }
+              ].map((stat, idx) => (
+                <div key={idx} className="p-4 md:p-6">
+                  <p className="font-headline text-3xl md:text-4xl text-on-secondary-container">{stat.num}</p>
+                  <p className="font-label text-xs uppercase tracking-widest text-on-secondary-container mt-2 opacity-80">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Architectural Philosophy */}
         <section className="py-16 md:py-24 lg:py-32 px-4 md:px-8 bg-surface overflow-hidden">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center">

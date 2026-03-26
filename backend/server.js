@@ -1,11 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import connectDB from "./config/db.js";
 import landRoutes from "./routes/landRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
-import { login, logout, getMe } from "./controllers/authController.js";
+import { login, logout, getMe, register } from "./controllers/authController.js";
 import { protect } from "./middleware/authMiddleware.js";
 
 dotenv.config();
@@ -13,7 +14,12 @@ connectDB();
 
 const app = express();
 
-// Middleware
+const corsOptions = {
+  origin: ["http://localhost:5173", "http://localhost:3000"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -24,6 +30,7 @@ app.use("/api/customers", customerRoutes);
 
 // Auth routes
 app.post("/api/auth/login", login);
+app.post("/api/auth/register", register);
 app.post("/api/auth/logout", logout);
 app.get("/api/auth/me", protect, getMe);
 
@@ -41,7 +48,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

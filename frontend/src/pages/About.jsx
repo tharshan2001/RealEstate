@@ -59,24 +59,6 @@ const About = () => {
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="py-10 md:py-14 px-4 md:px-8 bg-surface-container-low">
-          <div className="container mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center">
-              {[
-                { num: '6', label: 'Curated Sites' },
-                { num: '6', label: 'Locations' },
-                { num: '30+', label: 'Years Heritage' },
-                { num: '100%', label: 'Verified Titles' }
-              ].map((stat, idx) => (
-                <div key={idx} className="p-4 md:p-6">
-                  <p className="font-headline text-3xl md:text-4xl text-primary">{stat.num}</p>
-                  <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant mt-2">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* CTA */}
         <section className="py-12 md:py-16 px-4 md:px-8 bg-surface">
