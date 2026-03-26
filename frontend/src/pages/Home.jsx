@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { lands } from '../data/lands';
+import MobileTestimonialsCarousel from '../components/MobileTestimonialsCarousel';
 
 const Home = () => {
   return (
@@ -141,8 +142,11 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Testimonials (5 testimonials, no photos) */}
-        <section className="py-12 md:py-16 lg:py-24 px-4 md:px-8 bg-surface-container-highest">
+        {/* Mobile-only: compact testimonial carousel */}
+        <MobileTestimonialsCarousel />
+
+        {/* Testimonials (5 testimonials, no photos) for md and up */}
+        <section className="py-12 md:py-16 lg:py-24 px-4 md:px-8 bg-surface-container-highest hidden md:block">
           <div className="max-w-7xl mx-auto text-center">
             <h2 className="font-headline text-2xl md:text-3xl text-primary mb-8 md:mb-12">What Our Clients Say</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-items-center">

@@ -18,12 +18,9 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md border-b border-outline-variant/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14 md:h-16">
-          {/* Logo */}
+          {/* Logo (from public/logo.png) */}
           <Link to="/" className="flex items-center gap-2 md:gap-3">
-            <span className="material-symbols-outlined text-primary text-xl md:text-2xl">home</span>
-            <span className="text-lg md:text-2xl font-headline italic font-light tracking-wide text-primary">
-              7hilax RealAgro
-            </span>
+            <img src="/logo.png" alt="7hilax RealAgro" style={{ height: '100px', width: 'auto' }} />
           </Link>
 
           {/* Desktop Nav */}

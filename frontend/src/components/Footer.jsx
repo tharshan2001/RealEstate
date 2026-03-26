@@ -39,8 +39,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Areas - SEO */}
-          <div>
+          {/* Areas - SEO (hidden on small screens for minimal mobile footer) */}
+          <div className="hidden md:block">
             <h4 className="font-label text-xs uppercase tracking-widest text-primary font-semibold mb-4 md:mb-6">Areas</h4>
             <div className="flex flex-col gap-2 md:gap-3">
               {areas.map((area) => (
@@ -60,8 +60,8 @@ const Footer = () => {
               <Link to="/blog" className="font-body text-sm text-on-surface-variant hover:text-primary transition-colors">Blog</Link>
               <Link to="/about" className="font-body text-sm text-on-surface-variant hover:text-primary transition-colors">About Us</Link>
             </div>
-            {/* Social Links */}
-            <div className="flex gap-4 mt-4 md:mt-6">
+            {/* Social Links (hidden on small screens for minimal mobile footer) */}
+            <div className="hidden md:flex gap-4 mt-4 md:mt-6">
               <a href="#" className="text-on-surface-variant hover:text-primary transition-colors">
                 <span className="material-symbols-outlined">public</span>
               </a>
