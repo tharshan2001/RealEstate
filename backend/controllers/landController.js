@@ -29,10 +29,31 @@ export const getLands = async (req, res) => {
   }
 };
 
+// Get all lands (admin - includes unpublished)
+export const getLandsAll = async (req, res) => {
+  try {
+    const lands = await Land.find({}).sort({ createdAt: -1 });
+    res.json(lands);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get single land
 export const getLand = async (req, res) => {
   try {
     const land = await Land.findOne({ slug: req.params.slug, isPublished: true });
+    if (!land) return res.status(404).json({ message: "Land not found" });
+    res.json(land);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get single land by ID (admin)
+export const getLandById = async (req, res) => {
+  try {
+    const land = await Land.findById(req.params.id);
     if (!land) return res.status(404).json({ message: "Land not found" });
     res.json(land);
   } catch (error) {
@@ -89,6 +110,10 @@ export const updateLand = async (req, res) => {
       updateData.coordinates = JSON.parse(updateData.coordinates);
     }
 
+    if (updateData.features && typeof updateData.features === "string") {
+      updateData.features = JSON.parse(updateData.features);
+    }
+
     if (req.files && req.files.length > 0) {
       const newGallery = [];
       for (const file of req.files) {
@@ -99,13 +124,18 @@ export const updateLand = async (req, res) => {
       const existingGallery = req.body.existingGallery ? JSON.parse(req.body.existingGallery) : [];
       updateData.gallery = [...existingGallery, ...newGallery].slice(0, 8);
       
-      if (!updateData.heroImg && updateData.gallery.length > 0) {
+      if (req.body.existingHeroImg) {
+        updateData.heroImg = req.body.existingHeroImg;
+      } else if (updateData.gallery.length > 0) {
         updateData.heroImg = updateData.gallery[0];
       }
-    }
-
-    if (updateData.features && typeof updateData.features === "string") {
-      updateData.features = JSON.parse(updateData.features);
+    } else {
+      if (req.body.existingGallery) {
+        updateData.gallery = JSON.parse(req.body.existingGallery);
+      }
+      if (req.body.existingHeroImg) {
+        updateData.heroImg = req.body.existingHeroImg;
+      }
     }
 
     const land = await Land.findByIdAndUpdate(req.params.id, updateData, { new: true });

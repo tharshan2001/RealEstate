@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5030/api/';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -10,43 +10,14 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Add request/response logging
 api.interceptors.request.use(
-  (config) => {
-    console.log('[API Request]', {
-      url: config.url,
-      method: config.method,
-      data: config.data,
-      headers: config.headers,
-      withCredentials: config.withCredentials,
-    });
-    return config;
-  },
-  (error) => {
-    console.error('[API Request Error]', error);
-    return Promise.reject(error);
-  }
+  (config) => config,
+  (error) => Promise.reject(error)
 );
 
 api.interceptors.response.use(
-  (response) => {
-    console.log('[API Response]', {
-      url: response.config.url,
-      status: response.status,
-      data: response.data,
-      headers: response.headers,
-    });
-    return response;
-  },
-  (error) => {
-    console.error('[API Response Error]', {
-      url: error.config?.url,
-      status: error.response?.status,
-      data: error.response?.data,
-      message: error.message,
-    });
-    return Promise.reject(error);
-  }
+  (response) => response,
+  (error) => Promise.reject(error)
 );
 
 export const authApi = {
@@ -57,7 +28,9 @@ export const authApi = {
 
 export const landsApi = {
   getLands: () => api.get('/lands'),
+  getLandsAll: () => api.get('/lands/all'),
   getLand: (slug) => api.get(`/lands/${slug}`),
+  getLandById: (id) => api.get(`/lands/id/${id}`),
   createLand: (data) => api.post('/lands', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
@@ -69,7 +42,9 @@ export const landsApi = {
 
 export const blogsApi = {
   getBlogs: () => api.get('/blogs'),
+  getBlogsAll: () => api.get('/blogs/all'),
   getBlog: (slug) => api.get(`/blogs/${slug}`),
+  getBlogById: (id) => api.get(`/blogs/id/${id}`),
   createBlog: (data) => api.post('/blogs', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),

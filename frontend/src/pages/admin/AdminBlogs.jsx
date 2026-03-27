@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { blogsApi } from '../../utils/api';
-import { Link } from 'react-router-dom';
 import { toast } from '../../components/Toast';
 import Modal from '../../components/admin/Modal';
 import BlogModalForm from '../../components/admin/BlogModalForm';
@@ -10,13 +9,13 @@ const AdminBlogs = () => {
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingBlog, setEditingBlog] = useState(null);
 
   const fetchBlogs = async () => {
     try {
-      const response = await blogsApi.getBlogs();
+      const response = await blogsApi.getBlogsAll();
       setBlogs(response.data);
-    } catch (error) {
-      console.error('Error fetching blogs:', error);
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -33,8 +32,7 @@ const AdminBlogs = () => {
       await blogsApi.deleteBlog(id);
       setBlogs(blogs.filter((b) => b._id !== id));
       toast.success('Blog deleted successfully');
-    } catch (error) {
-      console.error('Error deleting blog:', error);
+    } catch {
       toast.error('Failed to delete blog');
     } finally {
       setDeleteLoading(null);
@@ -113,15 +111,15 @@ const AdminBlogs = () => {
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <Link
-                      to={`/admin/blogs/${blog._id}`}
+                    <button
+                      onClick={() => setEditingBlog(blog)}
                       className="inline-flex items-center gap-1 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                       Edit
-                    </Link>
+                    </button>
                     <button
                       onClick={() => handleDelete(blog._id)}
                       disabled={deleteLoading === blog._id}
@@ -157,6 +155,19 @@ const AdminBlogs = () => {
       >
         <BlogModalForm
           onClose={() => setShowAddModal(false)}
+          onSuccess={fetchBlogs}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={!!editingBlog}
+        onClose={() => setEditingBlog(null)}
+        title="Edit Blog"
+        size="lg"
+      >
+        <BlogModalForm
+          blog={editingBlog}
+          onClose={() => setEditingBlog(null)}
           onSuccess={fetchBlogs}
         />
       </Modal>

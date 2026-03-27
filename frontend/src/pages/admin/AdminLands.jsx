@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { landsApi } from '../../utils/api';
-import { Link } from 'react-router-dom';
 import { toast } from '../../components/Toast';
 import Modal from '../../components/admin/Modal';
 import LandModalForm from '../../components/admin/LandModalForm';
@@ -10,13 +9,13 @@ const AdminLands = () => {
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingLand, setEditingLand] = useState(null);
 
   const fetchLands = async () => {
     try {
-      const response = await landsApi.getLands();
+      const response = await landsApi.getLandsAll();
       setLands(response.data);
-    } catch (error) {
-      console.error('Error fetching lands:', error);
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -33,8 +32,7 @@ const AdminLands = () => {
       await landsApi.deleteLand(id);
       setLands(lands.filter((l) => l._id !== id));
       toast.success('Land deleted successfully');
-    } catch (error) {
-      console.error('Error deleting land:', error);
+    } catch {
       toast.error('Failed to delete land');
     } finally {
       setDeleteLoading(null);
@@ -112,15 +110,15 @@ const AdminLands = () => {
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <Link
-                      to={`/admin/lands/${land._id}`}
+                    <button
+                      onClick={() => setEditingLand(land)}
                       className="inline-flex items-center gap-1 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                       Edit
-                    </Link>
+                    </button>
                     <button
                       onClick={() => handleDelete(land._id)}
                       disabled={deleteLoading === land._id}
@@ -156,6 +154,19 @@ const AdminLands = () => {
       >
         <LandModalForm
           onClose={() => setShowAddModal(false)}
+          onSuccess={fetchLands}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={!!editingLand}
+        onClose={() => setEditingLand(null)}
+        title="Edit Land"
+        size="lg"
+      >
+        <LandModalForm
+          land={editingLand}
+          onClose={() => setEditingLand(null)}
           onSuccess={fetchLands}
         />
       </Modal>

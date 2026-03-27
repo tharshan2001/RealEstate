@@ -43,7 +43,7 @@ const Navbar = () => {
             <img 
               src="/logo.png" 
               alt="7hilax RealAgro" 
-              className="h-14 md:h-18 w-auto transition-transform duration-300 group-hover:scale-105" 
+              className="h-24 md:h-30 w-auto transition-transform duration-300 group-hover:scale-105" 
             />
           </Link>
 

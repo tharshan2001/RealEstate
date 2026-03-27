@@ -11,8 +11,7 @@ const AdminCustomers = () => {
     try {
       const response = await customersApi.getCustomers();
       setCustomers(response.data);
-    } catch (error) {
-      console.error('Error fetching customers:', error);
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -29,8 +28,7 @@ const AdminCustomers = () => {
       await customersApi.deleteCustomer(id);
       setCustomers(customers.filter((c) => c._id !== id));
       toast.success('Customer deleted successfully');
-    } catch (error) {
-      console.error('Error deleting customer:', error);
+    } catch {
       toast.error('Failed to delete customer');
     } finally {
       setDeleteLoading(null);

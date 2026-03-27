@@ -16,7 +16,7 @@ const s3 = new S3Client({
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
 });
 
 export const uploadToS3 = async (file, folder = "") => {

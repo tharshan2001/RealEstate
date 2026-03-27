@@ -1,7 +1,9 @@
 import express from "express";
 import { 
   getBlogs, 
-  getBlog, 
+  getBlogsAll,
+  getBlog,
+  getBlogById,
   createBlog, 
   updateBlog, 
   deleteBlog 
@@ -12,7 +14,9 @@ import { uploadBlogImage } from "../middleware/uploadMiddleware.js";
 const router = express.Router();
 
 router.get("/", getBlogs);
+router.get("/all", protect, adminOnly, getBlogsAll);
 router.get("/:slug", getBlog);
+router.get("/id/:id", protect, adminOnly, getBlogById);
 router.post("/", protect, adminOnly, uploadBlogImage, createBlog);
 router.put("/:id", protect, adminOnly, uploadBlogImage, updateBlog);
 router.delete("/:id", protect, adminOnly, deleteBlog);

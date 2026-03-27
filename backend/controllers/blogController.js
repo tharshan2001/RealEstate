@@ -12,10 +12,31 @@ export const getBlogs = async (req, res) => {
   }
 };
 
+// Get all blogs (admin - includes unpublished)
+export const getBlogsAll = async (req, res) => {
+  try {
+    const blogs = await Blog.find({}).sort({ publishedAt: -1 });
+    res.json(blogs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get single blog
 export const getBlog = async (req, res) => {
   try {
     const blog = await Blog.findOne({ slug: req.params.slug, isPublished: true });
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+    res.json(blog);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get single blog by ID (admin)
+export const getBlogById = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
     res.json(blog);
   } catch (error) {
@@ -58,6 +79,8 @@ export const updateBlog = async (req, res) => {
 
     if (req.file) {
       updateData.image = await uploadToS3(req.file, "blogs/");
+    } else if (req.body.existingImage) {
+      updateData.image = req.body.existingImage;
     }
 
     const blog = await Blog.findByIdAndUpdate(req.params.id, updateData, { new: true });

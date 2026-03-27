@@ -12,8 +12,7 @@ const Blog = () => {
       try {
         const response = await blogsApi.getBlogs();
         setBlogs(response.data);
-      } catch (error) {
-        console.error('Error fetching blogs:', error);
+      } catch {
       } finally {
         setLoading(false);
       }

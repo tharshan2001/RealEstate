@@ -9,8 +9,8 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
       try {
         const [landsRes, blogsRes, customersRes] = await Promise.all([
-          landsApi.getLands(),
-          blogsApi.getBlogs(),
+          landsApi.getLandsAll(),
+          blogsApi.getBlogsAll(),
           customersApi.getCustomers(),
         ]);
         setStats({
@@ -18,8 +18,7 @@ const AdminDashboard = () => {
           blogs: blogsRes.data.length,
           customers: customersRes.data.length,
         });
-      } catch (error) {
-        console.error('Error fetching stats:', error);
+      } catch {
       } finally {
         setLoading(false);
       }

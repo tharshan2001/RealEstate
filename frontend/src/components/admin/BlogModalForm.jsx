@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { blogsApi } from '../../utils/api';
 import { toast } from '../Toast';
 
-const BlogModalForm = ({ onClose, onSuccess }) => {
+const BlogModalForm = ({ onClose, onSuccess, blog: existingBlog }) => {
+  const isEdit = Boolean(existingBlog);
+
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -13,8 +15,24 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
     isPublished: true,
   });
 
+  const [existingImage, setExistingImage] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (existingBlog) {
+      setFormData({
+        title: existingBlog.title || '',
+        slug: existingBlog.slug || '',
+        excerpt: existingBlog.excerpt || '',
+        content: existingBlog.content || '',
+        category: existingBlog.category || '',
+        author: existingBlog.author || '',
+        isPublished: existingBlog.isPublished ?? true,
+      });
+      setExistingImage(existingBlog.image || '');
+    }
+  }, [existingBlog]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,17 +52,25 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
       data.append(key, formData[key]);
     });
 
+    if (isEdit) {
+      data.append('existingImage', existingImage);
+    }
+
     if (image) {
       data.append('image', image);
     }
 
     try {
-      await blogsApi.createBlog(data);
-      toast.success('Blog created successfully');
+      if (isEdit) {
+        await blogsApi.updateBlog(existingBlog._id, data);
+        toast.success('Blog updated successfully');
+      } else {
+        await blogsApi.createBlog(data);
+        toast.success('Blog created successfully');
+      }
       onSuccess?.();
       onClose();
     } catch (error) {
-      console.error('Error saving blog:', error);
       toast.error(error.response?.data?.message || 'Failed to save blog');
     } finally {
       setLoading(false);
@@ -60,7 +86,7 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
           value={formData.title}
           onChange={handleChange}
           placeholder="Blog title"
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           required
         />
 
@@ -69,8 +95,8 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
           name="slug"
           value={formData.slug}
           onChange={handleChange}
-          placeholder="URL slug (e.g., my-blog-post)"
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          placeholder="URL slug"
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           required
         />
 
@@ -80,7 +106,7 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
           onChange={handleChange}
           placeholder="Short excerpt"
           rows={2}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none"
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
         />
 
         <textarea
@@ -88,8 +114,8 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
           value={formData.content}
           onChange={handleChange}
           placeholder="Blog content"
-          rows={4}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none"
+          rows={3}
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
           required
         />
 
@@ -100,7 +126,7 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
             value={formData.category}
             onChange={handleChange}
             placeholder="Category"
-            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           />
 
           <input
@@ -108,26 +134,53 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
             name="author"
             value={formData.author}
             onChange={handleChange}
-            placeholder="Author name"
-            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            placeholder="Author"
+            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           />
         </div>
 
-        <div className="flex items-center gap-4">
-          <label className="text-sm text-slate-600">Published</label>
-          <select
-            name="isPublished"
-            value={formData.isPublished}
-            onChange={(e) => setFormData({ ...formData, isPublished: e.target.value === 'true' })}
-            className="px-3 py-1.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setFormData({ ...formData, isPublished: true })}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              formData.isPublished
+                ? 'bg-green-100 text-green-700 border border-green-200'
+                : 'bg-slate-50 text-slate-400 border border-slate-200 hover:border-slate-300'
+            }`}
           >
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Publish
+          </button>
+          <button
+            type="button"
+            onClick={() => setFormData({ ...formData, isPublished: false })}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              !formData.isPublished
+                ? 'bg-slate-200 text-slate-700 border border-slate-300'
+                : 'bg-slate-50 text-slate-400 border border-slate-200 hover:border-slate-300'
+            }`}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            Unpublish
+          </button>
         </div>
 
+        {isEdit && existingImage && (
+          <div>
+            <label className="block text-xs text-slate-500 mb-1">Current Image</label>
+            <div className="w-24 h-24 rounded-lg overflow-hidden border border-slate-200">
+              <img src={existingImage} alt="" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        )}
+
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Featured Image</label>
+          <label className="block text-xs text-slate-500 mb-1">{isEdit ? 'Change Image' : 'Featured Image'}</label>
           <input
             type="file"
             accept="image/*"
@@ -159,7 +212,7 @@ const BlogModalForm = ({ onClose, onSuccess }) => {
               Saving...
             </>
           ) : (
-            'Create Blog'
+            isEdit ? 'Update Blog' : 'Create Blog'
           )}
         </button>
       </div>

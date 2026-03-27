@@ -25,8 +25,7 @@ const LandDetail = () => {
       try {
         const response = await landsApi.getLand(slug);
         setLand(response.data);
-      } catch (error) {
-        console.error('Error fetching land:', error);
+      } catch {
       } finally {
         setLoading(false);
       }

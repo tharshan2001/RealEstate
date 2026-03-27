@@ -26,7 +26,7 @@ const BlogForm = () => {
     if (isEdit) {
       const fetchBlog = async () => {
         try {
-          const response = await blogsApi.getBlog(id);
+          const response = await blogsApi.getBlogById(id);
           const blog = response.data;
           setFormData({
             title: blog.title || '',
@@ -37,8 +37,7 @@ const BlogForm = () => {
             author: blog.author || '',
             isPublished: blog.isPublished ?? true,
           });
-        } catch (error) {
-          console.error('Error fetching blog:', error);
+        } catch {
           toast.error('Failed to load blog');
           navigate('/admin/blogs');
         } finally {
@@ -81,7 +80,6 @@ const BlogForm = () => {
       }
       navigate('/admin/blogs');
     } catch (error) {
-      console.error('Error saving blog:', error);
       toast.error(error.response?.data?.message || 'Failed to save blog');
     } finally {
       setLoading(false);
@@ -191,16 +189,37 @@ const BlogForm = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Published</label>
-              <select
-                name="isPublished"
-                value={formData.isPublished}
-                onChange={(e) => setFormData({ ...formData, isPublished: e.target.value === 'true' })}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-              >
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Visibility</label>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isPublished: true })}
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    formData.isPublished
+                      ? 'bg-green-100 text-green-700 border-2 border-green-300'
+                      : 'bg-slate-50 text-slate-400 border-2 border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Publish
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isPublished: false })}
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    !formData.isPublished
+                      ? 'bg-slate-200 text-slate-700 border-2 border-slate-400'
+                      : 'bg-slate-50 text-slate-400 border-2 border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                  </svg>
+                  Unpublish
+                </button>
+              </div>
             </div>
           </div>
 

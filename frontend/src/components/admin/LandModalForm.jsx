@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { landsApi } from '../../utils/api';
 import { toast } from '../Toast';
 
-const LandModalForm = ({ onClose, onSuccess }) => {
+const LandModalForm = ({ onClose, onSuccess, land: existingLand }) => {
+  const isEdit = Boolean(existingLand);
+
   const [formData, setFormData] = useState({
     title: '',
     location: '',
@@ -17,6 +19,8 @@ const LandModalForm = ({ onClose, onSuccess }) => {
     isPublished: true,
   });
 
+  const [existingGallery, setExistingGallery] = useState([]);
+  const [existingHeroImg, setExistingHeroImg] = useState('');
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [locationSearch, setLocationSearch] = useState('');
@@ -24,6 +28,30 @@ const LandModalForm = ({ onClose, onSuccess }) => {
   const [searching, setSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef(null);
+
+  useEffect(() => {
+    if (existingLand) {
+      setFormData({
+        title: existingLand.title || '',
+        location: existingLand.location || '',
+        region: existingLand.region || 'Jaffna',
+        size: existingLand.size || '',
+        type: existingLand.type || 'residential',
+        price: existingLand.price || '',
+        description: existingLand.description || '',
+        features: existingLand.features?.join(', ') || '',
+        coordinates: { 
+          lat: existingLand.coordinates?.lat || '', 
+          lng: existingLand.coordinates?.lng || '' 
+        },
+        status: existingLand.status || 'available',
+        isPublished: existingLand.isPublished ?? true,
+      });
+      setLocationSearch(existingLand.location || '');
+      setExistingGallery(existingLand.gallery || []);
+      setExistingHeroImg(existingLand.heroImg || '');
+    }
+  }, [existingLand]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -40,7 +68,6 @@ const LandModalForm = ({ onClose, onSuccess }) => {
       setSearchResults([]);
       return;
     }
-
     setSearching(true);
     try {
       const response = await fetch(
@@ -48,8 +75,7 @@ const LandModalForm = ({ onClose, onSuccess }) => {
       );
       const data = await response.json();
       setSearchResults(data);
-    } catch (error) {
-      console.error('Search error:', error);
+    } catch {
       setSearchResults([]);
     } finally {
       setSearching(false);
@@ -104,17 +130,26 @@ const LandModalForm = ({ onClose, onSuccess }) => {
       }
     });
 
+    if (isEdit) {
+      data.append('existingGallery', JSON.stringify(existingGallery));
+      data.append('existingHeroImg', existingHeroImg);
+    }
+
     images.forEach((image) => {
       data.append('images', image);
     });
 
     try {
-      await landsApi.createLand(data);
-      toast.success('Land created successfully');
+      if (isEdit) {
+        await landsApi.updateLand(existingLand._id, data);
+        toast.success('Land updated successfully');
+      } else {
+        await landsApi.createLand(data);
+        toast.success('Land created successfully');
+      }
       onSuccess?.();
       onClose();
     } catch (error) {
-      console.error('Error saving land:', error);
       toast.error(error.response?.data?.message || 'Failed to save land');
     } finally {
       setLoading(false);
@@ -157,7 +192,6 @@ const LandModalForm = ({ onClose, onSuccess }) => {
               </svg>
             )}
           </div>
-
           {showResults && searchResults.length > 0 && (
             <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-40 overflow-y-auto">
               {searchResults.map((result, index) => (
@@ -178,7 +212,7 @@ const LandModalForm = ({ onClose, onSuccess }) => {
           name="region"
           value={formData.region}
           onChange={handleChange}
-          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
         >
           <option value="Jaffna">Jaffna</option>
           <option value="Kilinochchi">Kilinochchi</option>
@@ -191,7 +225,7 @@ const LandModalForm = ({ onClose, onSuccess }) => {
           name="type"
           value={formData.type}
           onChange={handleChange}
-          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
         >
           <option value="residential">Residential</option>
           <option value="commercial">Commercial</option>
@@ -204,8 +238,8 @@ const LandModalForm = ({ onClose, onSuccess }) => {
           name="size"
           value={formData.size}
           onChange={handleChange}
-          placeholder="Size (e.g., 2.5 acres)"
-          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          placeholder="Size"
+          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           required
         />
 
@@ -214,8 +248,8 @@ const LandModalForm = ({ onClose, onSuccess }) => {
           name="price"
           value={formData.price}
           onChange={handleChange}
-          placeholder="Price (e.g., LKR 45M)"
-          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          placeholder="Price"
+          className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           required
         />
 
@@ -226,7 +260,7 @@ const LandModalForm = ({ onClose, onSuccess }) => {
             onChange={handleChange}
             placeholder="Description"
             rows={2}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none"
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
           />
         </div>
 
@@ -237,12 +271,25 @@ const LandModalForm = ({ onClose, onSuccess }) => {
             value={formData.features}
             onChange={handleChange}
             placeholder="Features (comma separated)"
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           />
         </div>
 
+        {isEdit && existingGallery.length > 0 && (
+          <div className="col-span-2">
+            <label className="block text-xs text-slate-500 mb-1">Current Images</label>
+            <div className="flex flex-wrap gap-2">
+              {existingGallery.map((img, idx) => (
+                <div key={idx} className="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-200">
+                  <img src={img} alt="" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="col-span-2">
-          <label className="block text-xs text-slate-500 mb-1">Images</label>
+          <label className="block text-xs text-slate-500 mb-1">{isEdit ? 'Add More Images' : 'Images'}</label>
           <input
             type="file"
             multiple
@@ -250,6 +297,37 @@ const LandModalForm = ({ onClose, onSuccess }) => {
             onChange={handleImageChange}
             className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700"
           />
+        </div>
+
+        <div className="col-span-2 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setFormData({ ...formData, isPublished: true })}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              formData.isPublished
+                ? 'bg-green-100 text-green-700 border border-green-200'
+                : 'bg-slate-50 text-slate-400 border border-slate-200 hover:border-slate-300'
+            }`}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Publish
+          </button>
+          <button
+            type="button"
+            onClick={() => setFormData({ ...formData, isPublished: false })}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              !formData.isPublished
+                ? 'bg-slate-200 text-slate-700 border border-slate-300'
+                : 'bg-slate-50 text-slate-400 border border-slate-200 hover:border-slate-300'
+            }`}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            Unpublish
+          </button>
         </div>
       </div>
 
@@ -275,7 +353,7 @@ const LandModalForm = ({ onClose, onSuccess }) => {
               Saving...
             </>
           ) : (
-            'Create Land'
+            isEdit ? 'Update Land' : 'Create Land'
           )}
         </button>
       </div>
