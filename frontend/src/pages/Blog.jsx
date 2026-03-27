@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import SEO from '../components/SEO';
 import { blogsApi } from '../utils/api';
 
 const Blog = () => {
@@ -26,11 +27,18 @@ const Blog = () => {
   };
 
   return (
-    <Layout>
+    <>
+      <SEO 
+        title="Blog & Updates"
+        description="Read the latest news, insights and guides about real estate investment in Northern Sri Lanka's Jaffna, Kilinochchi, Mannar, and Mullaitivu regions."
+        keywords="blog, real estate news, northern sri lanka, investment guide, property insights"
+        url="/blog"
+      />
+      <Layout>
       <main className="pt-0 pb-16 md:pb-20 px-4 md:px-6 lg:px-8">
         <header className="mb-10 md:mb-14 text-center">
-          <span className="font-label text-secondary uppercase tracking-[0.3em] text-xs font-semibold">Blog</span>
-          <h1 className="font-headline text-3xl md:text-5xl lg:text-6xl text-primary mt-2">Latest Updates</h1>
+          <span className="font-label text-tertiary uppercase tracking-[0.3em] text-xs font-semibold">Blog</span>
+          <h1 className="font-headline text-3xl md:text-5xl lg:text-6xl text-secondary mt-2">Latest Updates</h1>
           <p className="font-body text-on-surface-variant text-base md:text-lg max-w-md mx-auto mt-4">
             News, insights and guides about real estate in Northern Province.
           </p>
@@ -38,7 +46,7 @@ const Blog = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary"></div>
           </div>
         ) : blogs.length > 0 ? (
           <>
@@ -49,7 +57,7 @@ const Blog = () => {
                   src={blogs[0].image || 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80'} 
                   alt={blogs[0].title}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/30 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 via-secondary/30 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                   <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium uppercase tracking-wider">{blogs[0].category || 'Blog'}</span>
                   <h2 className="font-headline text-xl md:text-2xl lg:text-3xl text-white mt-3 md:mt-4 mb-2">{blogs[0].title}</h2>
@@ -73,7 +81,7 @@ const Blog = () => {
                       <span className="font-label text-xs uppercase tracking-widest text-tertiary-fixed-variant">{blog.category || 'Blog'}</span>
                       <span className="font-body text-xs text-on-surface-variant">{formatDate(blog.publishedAt)}</span>
                     </div>
-                    <h3 className="font-headline text-lg md:text-xl text-primary group-hover:text-secondary transition-colors">{blog.title}</h3>
+                    <h3 className="font-headline text-lg md:text-xl text-secondary group-hover:text-tertiary transition-colors">{blog.title}</h3>
                     <p className="font-body text-sm text-on-surface-variant line-clamp-2">{blog.excerpt}</p>
                   </div>
                 </article>
@@ -88,7 +96,7 @@ const Blog = () => {
         )}
 
         <div className="mt-12 md:mt-16 p-8 md:p-12 bg-surface-container-low rounded-xl text-center">
-          <h3 className="font-headline text-xl md:text-2xl text-primary mb-3 md:mb-4">Stay Updated</h3>
+          <h3 className="font-headline text-xl md:text-2xl text-secondary mb-3 md:mb-4">Stay Updated</h3>
           <p className="text-on-surface-variant mb-5 md:mb-6 max-w-md mx-auto">
             Subscribe to our newsletter for the latest property listings and market insights.
           </p>
@@ -96,12 +104,12 @@ const Blog = () => {
             <input 
               type="email"
               placeholder="Your Email"
-              className="flex-1 bg-surface border border-outline-variant rounded-full px-5 py-3 focus:outline-none focus:border-primary"
+              className="flex-1 bg-surface border border-outline-variant rounded-full px-5 py-3 focus:outline-none focus:border-secondary"
               required
             />
             <button 
               type="submit"
-              className="bg-primary text-on-primary px-6 py-3 rounded-full font-label text-sm uppercase tracking-widest hover:bg-primary-container transition-all"
+              className="bg-secondary text-white px-6 py-3 rounded-full font-label text-sm uppercase tracking-widest hover:bg-sage-dark transition-all"
             >
               Subscribe
             </button>
@@ -109,6 +117,7 @@ const Blog = () => {
         </div>
       </main>
     </Layout>
+    </>
   );
 };
 

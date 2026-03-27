@@ -2,6 +2,23 @@
 import Land from "../models/Land.js";
 import { uploadToS3 } from "../middleware/uploadMiddleware.js";
 
+const generateSlug = async (title) => {
+  const baseSlug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  let slug = baseSlug;
+  let counter = 1;
+  
+  while (await Land.findOne({ slug })) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+  
+  return slug;
+};
+
 // Get all lands
 export const getLands = async (req, res) => {
   try {
@@ -26,9 +43,10 @@ export const getLand = async (req, res) => {
 // Create land (admin)
 export const createLand = async (req, res) => {
   try {
-    const { title, slug, location, region, size, type, price, description, features, coordinates, status, isPublished } = req.body;
+    const { title, location, region, size, type, price, description, features, coordinates, status, isPublished } = req.body;
 
     const parsedCoordinates = coordinates ? JSON.parse(coordinates) : null;
+    const slug = await generateSlug(title);
 
     const gallery = [];
     if (req.files && req.files.length > 0) {

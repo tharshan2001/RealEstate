@@ -10,6 +10,45 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// Add request/response logging
+api.interceptors.request.use(
+  (config) => {
+    console.log('[API Request]', {
+      url: config.url,
+      method: config.method,
+      data: config.data,
+      headers: config.headers,
+      withCredentials: config.withCredentials,
+    });
+    return config;
+  },
+  (error) => {
+    console.error('[API Request Error]', error);
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    console.log('[API Response]', {
+      url: response.config.url,
+      status: response.status,
+      data: response.data,
+      headers: response.headers,
+    });
+    return response;
+  },
+  (error) => {
+    console.error('[API Response Error]', {
+      url: error.config?.url,
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message,
+    });
+    return Promise.reject(error);
+  }
+);
+
 export const authApi = {
   login: (credentials) => api.post('/auth/login', credentials),
   logout: () => api.post('/auth/logout'),
@@ -42,6 +81,7 @@ export const blogsApi = {
 
 export const customersApi = {
   getCustomers: () => api.get('/customers'),
+  createCustomer: (data) => api.post('/customers', data),
   deleteCustomer: (id) => api.delete(`/customers/${id}`),
 };
 

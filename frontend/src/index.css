@@ -1,39 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2d4a3e;
-  --color-on-primary: #ffffff;
-  --color-primary-container: #d4e4db;
-  --color-on-primary-container: #0a2919;
-  --color-primary-fixed: #d4e4db;
-  --color-on-primary-fixed: #0a2919;
-  --color-primary-fixed-dim: #b0ccbf;
-  --color-on-primary-fixed-variant: #1a3d2a;
+  --color-primary: #faf8f5;
+  --color-on-primary: #1a1a18;
+  --color-primary-container: #f5f2ed;
+  --color-on-primary-container: #1a1a18;
+  --color-primary-fixed: #f5f2ed;
+  --color-on-primary-fixed: #1a1a18;
+  --color-primary-fixed-dim: #e8e3dc;
+  --color-on-primary-fixed-variant: #1a1a18;
 
-  --color-secondary: #5c7a5f;
+  --color-secondary: #2d4a3e;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #e3ede2;
-  --color-on-secondary-container: #3a4f3d;
-  --color-secondary-fixed: #c8dbc8;
-  --color-on-secondary-fixed: #1a2918;
-  --color-secondary-fixed-dim: #a8c2a9;
-  --color-on-secondary-fixed-variant: #2a3d2c;
+  --color-secondary-container: #d4e4db;
+  --color-on-secondary-container: #0a2919;
+  --color-secondary-fixed: #d4e4db;
+  --color-on-secondary-fixed: #0a2919;
+  --color-secondary-fixed-dim: #b0ccbf;
+  --color-on-secondary-fixed-variant: #1a3d2a;
 
-  --color-tertiary: #8b7355;
+  --color-tertiary: #8b9f89;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #f5ebe0;
-  --color-on-tertiary-container: #5c4328;
-  --color-tertiary-fixed: #f5ebe0;
-  --color-on-tertiary-fixed: #3d2a1a;
-  --color-tertiary-fixed-dim: #d9cbb8;
-  --color-on-tertiary-fixed-variant: #6d5035;
+  --color-tertiary-container: #d4e4db;
+  --color-on-tertiary-container: #2d4a3e;
+  --color-tertiary-fixed: #d4e4db;
+  --color-on-tertiary-fixed: #1a3d2a;
+  --color-tertiary-fixed-dim: #c8d9c7;
+  --color-on-tertiary-fixed-variant: #3d4f3c;
 
-  --color-surface: #faf8f5;
-  --color-surface-dim: #e5e0db;
+  --color-surface: #f5f2ed;
+  --color-surface-dim: #e8e3dc;
   --color-surface-bright: #ffffff;
   --color-surface-container: #f0ebe5;
-  --color-surface-container-low: #f5f2ed;
-  --color-surface-container-high: #e8e3dc;
+  --color-surface-container-low: #faf8f5;
+  --color-surface-container-high: #e5e0db;
   --color-surface-container-highest: #ded8cf;
   --color-surface-container-lowest: #ffffff;
 
@@ -50,11 +50,16 @@
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
 
-  --color-inverse-surface: #e5e0db;
-  --color-inverse-on-surface: #2e2e2b;
-  --color-inverse-primary: #a8c2a9;
+  --color-inverse-surface: #2e2e2b;
+  --color-inverse-on-surface: #f5f2ed;
+  --color-inverse-primary: #5c7a5f;
 
   --color-surface-tint: #2d4a3e;
+
+  --color-sage-light: #d4e4db;
+  --color-sage: #8b9f89;
+  --color-sage-dark: #5c7a5f;
+  --color-sage-moss: #2d4a3e;
 
   --font-family-headline: "Noto Serif", serif;
   --font-family-body: "Manrope", sans-serif;
@@ -64,6 +69,10 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
 }
 
 @layer base {
@@ -72,7 +81,7 @@
   }
   
   body {
-    @apply bg-background text-on-surface;
+    @apply bg-background text-on-surface antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -110,7 +119,7 @@
   }
 
   .monsoon-glass {
-    background: rgba(250, 248, 245, 0.7);
+    background: rgba(250, 248, 245, 0.8);
     backdrop-filter: blur(12px);
   }
 
@@ -158,23 +167,13 @@
   .stagger-5 { animation-delay: 0.5s; }
 
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .slide-in-left {
@@ -182,13 +181,31 @@
   }
 
   @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+}
+
+
+/* Hide scrollbars only on mobile (max-width 768px) */
+@media (max-width: 768px) {
+  /* Firefox */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  /* Chrome, Safari, Edge */
+  *::-webkit-scrollbar {
+    display: none;
   }
 }

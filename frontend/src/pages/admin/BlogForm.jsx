@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { blogsApi } from '../../utils/api';
+import { toast } from '../../components/Toast';
 
 const BlogForm = () => {
   const { id } = useParams();
@@ -38,7 +39,7 @@ const BlogForm = () => {
           });
         } catch (error) {
           console.error('Error fetching blog:', error);
-          alert('Failed to load blog');
+          toast.error('Failed to load blog');
           navigate('/admin/blogs');
         } finally {
           setFetching(false);
@@ -73,31 +74,48 @@ const BlogForm = () => {
     try {
       if (isEdit) {
         await blogsApi.updateBlog(id, data);
+        toast.success('Blog updated successfully');
       } else {
         await blogsApi.createBlog(data);
+        toast.success('Blog created successfully');
       }
       navigate('/admin/blogs');
     } catch (error) {
       console.error('Error saving blog:', error);
-      alert(error.response?.data?.message || 'Failed to save blog');
+      toast.error(error.response?.data?.message || 'Failed to save blog');
     } finally {
       setLoading(false);
     }
   };
 
   if (fetching) {
-    return <div className="flex items-center justify-center h-64">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
-    </div>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-serif font-bold text-slate-900 mb-8">
-        {isEdit ? 'Edit Blog' : 'Add New Blog'}
-      </h1>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">{isEdit ? 'Edit Blog' : 'Add New Blog'}</h1>
+          <p className="text-slate-500 mt-1">{isEdit ? 'Update blog details' : 'Create a new blog post'}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => navigate('/admin/blogs')}
+          className="inline-flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back
+        </button>
+      </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">Title</label>
@@ -106,7 +124,7 @@ const BlogForm = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               required
             />
           </div>
@@ -118,7 +136,7 @@ const BlogForm = () => {
               name="slug"
               value={formData.slug}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               required
             />
           </div>
@@ -130,7 +148,7 @@ const BlogForm = () => {
               value={formData.excerpt}
               onChange={handleChange}
               rows={2}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
             />
           </div>
 
@@ -141,7 +159,7 @@ const BlogForm = () => {
               value={formData.content}
               onChange={handleChange}
               rows={10}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
               required
             />
           </div>
@@ -155,7 +173,7 @@ const BlogForm = () => {
                 value={formData.category}
                 onChange={handleChange}
                 placeholder="e.g., Real Estate, Investment"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               />
             </div>
 
@@ -166,7 +184,7 @@ const BlogForm = () => {
                 name="author"
                 value={formData.author}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               />
             </div>
           </div>
@@ -178,7 +196,7 @@ const BlogForm = () => {
                 name="isPublished"
                 value={formData.isPublished}
                 onChange={(e) => setFormData({ ...formData, isPublished: e.target.value === 'true' })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               >
                 <option value="true">Yes</option>
                 <option value="false">No</option>
@@ -192,23 +210,31 @@ const BlogForm = () => {
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-amber-500"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-4 pt-4">
+        <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-lg shadow-blue-200 disabled:opacity-50 flex items-center gap-2"
           >
-            {loading ? 'Saving...' : isEdit ? 'Update Blog' : 'Create Blog'}
+            {loading ? (
+              <>
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Saving...
+              </>
+            ) : isEdit ? 'Update Blog' : 'Create Blog'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/admin/blogs')}
-            className="px-6 py-3 border border-gray-200 text-slate-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+            className="px-6 py-3 border border-slate-300 text-slate-600 hover:bg-slate-50 rounded-lg font-medium transition-colors"
           >
             Cancel
           </button>
